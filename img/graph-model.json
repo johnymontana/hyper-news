@@ -1,0 +1,311 @@
+{
+  "style": {
+    "font-family": "sans-serif",
+    "background-color": "#ffffff",
+    "background-image": "",
+    "background-size": "100%",
+    "node-color": "#ffffff",
+    "border-width": 4,
+    "border-color": "#000000",
+    "radius": 50,
+    "node-padding": 5,
+    "node-margin": 2,
+    "outside-position": "auto",
+    "node-icon-image": "",
+    "node-background-image": "",
+    "icon-position": "inside",
+    "icon-size": 64,
+    "caption-position": "inside",
+    "caption-max-width": 200,
+    "caption-color": "#000000",
+    "caption-font-size": 50,
+    "caption-font-weight": "normal",
+    "label-position": "inside",
+    "label-display": "pill",
+    "label-color": "#000000",
+    "label-background-color": "#ffffff",
+    "label-border-color": "#000000",
+    "label-border-width": 4,
+    "label-font-size": 40,
+    "label-padding": 5,
+    "label-margin": 4,
+    "directionality": "directed",
+    "detail-position": "inline",
+    "detail-orientation": "parallel",
+    "arrow-width": 5,
+    "arrow-color": "#000000",
+    "margin-start": 5,
+    "margin-end": 5,
+    "margin-peer": 20,
+    "attachment-start": "normal",
+    "attachment-end": "normal",
+    "relationship-icon-image": "",
+    "type-color": "#000000",
+    "type-background-color": "#ffffff",
+    "type-border-color": "#000000",
+    "type-border-width": 0,
+    "type-font-size": 16,
+    "type-padding": 5,
+    "property-position": "outside",
+    "property-alignment": "colon",
+    "property-color": "#000000",
+    "property-font-size": 16,
+    "property-font-weight": "normal"
+  },
+  "nodes": [
+    {
+      "id": "n0",
+      "position": {
+        "x": 0,
+        "y": 82.93085754349647
+      },
+      "caption": "",
+      "style": {
+        "node-color": "#fb9e00"
+      },
+      "labels": [
+        "Article"
+      ],
+      "properties": {
+        "uri": "string",
+        "url": "string",
+        "published_date": "Date",
+        "title": "string",
+        "abstract": "string"
+      }
+    },
+    {
+      "id": "n1",
+      "position": {
+        "x": 135.44834680618447,
+        "y": -298.91663135329367
+      },
+      "caption": "",
+      "style": {
+        "node-color": "#fb9e00"
+      },
+      "labels": [
+        "Author"
+      ],
+      "properties": {
+        "Author.name": "string"
+      }
+    },
+    {
+      "id": "n2",
+      "position": {
+        "x": 286.4906276209683,
+        "y": -203.5597700774718
+      },
+      "caption": "",
+      "style": {
+        "node-color": "#fb9e00"
+      },
+      "labels": [
+        "Topic"
+      ],
+      "properties": {
+        "Topic.name": "string"
+      }
+    },
+    {
+      "id": "n3",
+      "position": {
+        "x": 368.40141855635676,
+        "y": -85.69344152095263
+      },
+      "caption": "",
+      "style": {
+        "node-color": "#fb9e00"
+      },
+      "labels": [
+        "Organization"
+      ],
+      "properties": {
+        "Organization.name": "string"
+      }
+    },
+    {
+      "id": "n4",
+      "position": {
+        "x": 404.07659203166594,
+        "y": 53.335803879289806
+      },
+      "caption": "",
+      "style": {
+        "node-color": "#fb9e00"
+      },
+      "labels": [
+        "Person"
+      ],
+      "properties": {
+        "Person.name": "string"
+      }
+    },
+    {
+      "id": "n5",
+      "position": {
+        "x": -357.56337399645764,
+        "y": 82.93085754349647
+      },
+      "caption": "",
+      "style": {
+        "node-color": "#68bc00"
+      },
+      "labels": [
+        "Geo"
+      ],
+      "properties": {
+        "Geo.name": "string",
+        "Geo.geometry": "geo"
+      }
+    },
+    {
+      "id": "n6",
+      "position": {
+        "x": -237.15130156356938,
+        "y": -184.67113533106271
+      },
+      "caption": "",
+      "style": {
+        "node-color": "#d33115"
+      },
+      "labels": [
+        "Image"
+      ],
+      "properties": {
+        "Image.caption": "string",
+        "Image.url": "string",
+        "Image.embedding": "vector"
+      }
+    },
+    {
+      "id": "n7",
+      "position": {
+        "x": -268.0608486535654,
+        "y": 319.5633739964577
+      },
+      "caption": "",
+      "style": {
+        "node-color": "#7b64ff"
+      },
+      "labels": [
+        "Chunk"
+      ],
+      "properties": {
+        "Chunk.text": "string",
+        "Chunk.embedding": "string"
+      }
+    },
+    {
+      "id": "n8",
+      "position": {
+        "x": -146.9002250112637,
+        "y": 408.9245542852751
+      },
+      "caption": "",
+      "style": {
+        "node-color": "#7b64ff"
+      },
+      "labels": [
+        "Chunk"
+      ],
+      "properties": {
+        "Chunk.text": "string",
+        "Chunk.embedding": "string"
+      }
+    },
+    {
+      "id": "n9",
+      "position": {
+        "x": 24.870470761177334,
+        "y": 439.6282448451812
+      },
+      "caption": "",
+      "style": {
+        "node-color": "#7b64ff"
+      },
+      "labels": [
+        "Chunk"
+      ],
+      "properties": {
+        "Chunk.text": "string",
+        "Chunk.embedding": "vector"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "id": "n0",
+      "type": "Article.author",
+      "style": {},
+      "properties": {},
+      "fromId": "n0",
+      "toId": "n1"
+    },
+    {
+      "id": "n1",
+      "type": "Article.topic",
+      "style": {},
+      "properties": {},
+      "fromId": "n0",
+      "toId": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "Article.organization",
+      "style": {},
+      "properties": {},
+      "fromId": "n0",
+      "toId": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "Article.person",
+      "style": {},
+      "properties": {},
+      "fromId": "n0",
+      "toId": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "Article.geo",
+      "style": {},
+      "properties": {},
+      "fromId": "n0",
+      "toId": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "Article.image",
+      "style": {},
+      "properties": {},
+      "fromId": "n0",
+      "toId": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "Article.chunk",
+      "style": {},
+      "properties": {},
+      "fromId": "n0",
+      "toId": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "Article.chunk",
+      "style": {},
+      "properties": {},
+      "fromId": "n0",
+      "toId": "n8"
+    },
+    {
+      "id": "n8",
+      "type": "Article.chunk",
+      "style": {},
+      "properties": {},
+      "fromId": "n0",
+      "toId": "n9"
+    }
+  ]
+}
