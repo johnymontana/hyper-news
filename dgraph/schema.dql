@@ -1,0 +1,21 @@
+<Article.abstract>: string @index(term) .
+<Article.embedding>: float32vector @index(hnsw(metric:"euclidean")) .
+<Article.geo>: [uid] .
+<Article.org>: [uid] .
+<Article.published>: datetime .
+<Article.title>: default .
+<Article.topic>: [uid] .
+<Article.uri>: default .
+<Article.url>: default .
+<Author.article>: [uid] .
+<Author.name>: default .
+<Geo.name>: default .
+<Image.article>: [uid] .
+<Image.caption>: default .
+<Image.url>: default .
+<Organization.name>: default .
+<Topic.name>: default .
+<dgraph.drop.op>: string .
+<dgraph.graphql.p_query>: string @index(sha256) .
+<dgraph.graphql.schema>: string .
+<dgraph.graphql.xid>: string @index(exact) @upsert .

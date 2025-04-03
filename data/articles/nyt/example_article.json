@@ -1,0 +1,68 @@
+{
+            "uri": "nyt://article/6ff00f2a-405a-5b74-99e6-f98f9a409884",
+            "url": "https://www.nytimes.com/2025/03/23/world/asia/cambodia-money-laundering-huione.html",
+            "id": 100000009988576,
+            "asset_id": 100000009988576,
+            "source": "New York Times",
+            "published_date": "2025-03-23",
+            "updated": "2025-03-23 10:17:45",
+            "section": "World",
+            "subsection": "Asia Pacific",
+            "nytdsection": "world",
+            "adx_keywords": "Frauds and Swindling;Money Laundering;Banking and Financial Institutions;Robberies and Thefts;Virtual Currency;Computers and the Internet;audio-neutral-immersive;audio-neutral-suspenseful;Huione Group;Tether Operations Ltd;Telegram LLC;Phnom Penh (Cambodia);Cambodia",
+            "column": null,
+            "byline": "By Selam Gebrekidan, Joy Dong, Chang W. Lee and Weiyi Cai",
+            "type": "Article",
+            "title": "The Scammer’s Manual: How to Launder Money and Get Away With It",
+            "abstract": "Documents and insiders reveal how one of the world’s major money laundering networks operates.",
+            "des_facet": [
+                "Frauds and Swindling",
+                "Money Laundering",
+                "Banking and Financial Institutions",
+                "Robberies and Thefts",
+                "Virtual Currency",
+                "Computers and the Internet",
+                "audio-neutral-immersive",
+                "audio-neutral-suspenseful"
+            ],
+            "org_facet": [
+                "Huione Group",
+                "Tether Operations Ltd",
+                "Telegram LLC"
+            ],
+            "per_facet": [],
+            "geo_facet": [
+                "Phnom Penh (Cambodia)",
+                "Cambodia"
+            ],
+            "media": [
+                {
+                    "type": "image",
+                    "subtype": "photo",
+                    "caption": "Huione is a constellation of affiliates. The headquarters of one of its companies, Huione Pay, is in Phnom Penh, Cambodia.",
+                    "copyright": "",
+                    "approved_for_syndication": 1,
+                    "media-metadata": [
+                        {
+                            "url": "https://static01.nyt.com/images/2025/03/10/multimedia/00int-moneylaundering-03-hpgl/00int-moneylaundering-03-hpgl-thumbStandard.jpg",
+                            "format": "Standard Thumbnail",
+                            "height": 75,
+                            "width": 75
+                        },
+                        {
+                            "url": "https://static01.nyt.com/images/2025/03/10/multimedia/00int-moneylaundering-03-hpgl/00int-moneylaundering-03-hpgl-mediumThreeByTwo210.jpg",
+                            "format": "mediumThreeByTwo210",
+                            "height": 140,
+                            "width": 210
+                        },
+                        {
+                            "url": "https://static01.nyt.com/images/2025/03/10/multimedia/00int-moneylaundering-03-hpgl/00int-moneylaundering-03-hpgl-mediumThreeByTwo440.jpg",
+                            "format": "mediumThreeByTwo440",
+                            "height": 293,
+                            "width": 440
+                        }
+                    ]
+                }
+            ],
+            "eta_id": 0
+        }

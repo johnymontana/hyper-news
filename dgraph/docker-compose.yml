@@ -1,0 +1,35 @@
+version: "3.8"
+
+#
+# A simple compose file for running single zero and alpha
+#
+services:
+  # Dgraph Zero controls the cluster
+  zero:
+    image: dgraph/dgraph:latest
+    container_name: news_graph_zero
+    volumes:
+      - ~/news_graph:/dgraph
+    ports:
+      - 5080:5080
+      - 6080:6080
+    command: >
+      dgraph zero --my=zero:5080 
+      --logtostderr -v=1 
+      --telemetry sentry=false
+
+  # Dgraph Alpha hosts the graph and indexes
+  alpha:
+    image: dgraph/dgraph:latest
+    container_name: news_graph_alpha
+    volumes:
+      - ~/news_graph:/dgraph
+      - ../data:/data
+    ports:
+      - 8080:8080
+      - 9080:9080
+    command: >
+      dgraph alpha --my=alpha:7080 --zero=zero:5080
+        --security whitelist=0.0.0.0/0
+        --logtostderr -v=1
+        --telemetry sentry=false

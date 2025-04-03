@@ -1,0 +1,61 @@
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <dgraph.type> "Article" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.title> "The Scammer’s Manual: How to Launder Money and Get Away With It" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.abstract> "Documents and insiders reveal how one of the world’s major money laundering networks operates." .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.uri> "nyt://article/6ff00f2a-405a-5b74-99e6-f98f9a409884" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.url> "https://www.nytimes.com/2025/03/23/world/asia/cambodia-money-laundering-huione.html" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.published> "2025-03-23"^^<xs:dateTime> .
+_:bd5ff24a-4ec2-4066-9652-5171f57ef771 <dgraph.type> "Author" .
+_:bd5ff24a-4ec2-4066-9652-5171f57ef771 <Author.name> "Selam Gebrekidan" .
+_:bd5ff24a-4ec2-4066-9652-5171f57ef771 <Author.article> _:89285c4b-ab8b-424c-9563-3236d425c2c8 .
+_:e2476b0a-133c-4685-a8d8-a1b98236c346 <dgraph.type> "Author" .
+_:e2476b0a-133c-4685-a8d8-a1b98236c346 <Author.name> "Joy Dong" .
+_:e2476b0a-133c-4685-a8d8-a1b98236c346 <Author.article> _:89285c4b-ab8b-424c-9563-3236d425c2c8 .
+_:824a5abb-4454-4115-a940-7dee8fa0fc60 <dgraph.type> "Author" .
+_:824a5abb-4454-4115-a940-7dee8fa0fc60 <Author.name> "Chang W. Lee" .
+_:824a5abb-4454-4115-a940-7dee8fa0fc60 <Author.article> _:89285c4b-ab8b-424c-9563-3236d425c2c8 .
+_:e2cdac1e-7a47-4cd8-8fd9-897bd20f1c80 <dgraph.type> "Author" .
+_:e2cdac1e-7a47-4cd8-8fd9-897bd20f1c80 <Author.name> "Weiyi Cai" .
+_:e2cdac1e-7a47-4cd8-8fd9-897bd20f1c80 <Author.article> _:89285c4b-ab8b-424c-9563-3236d425c2c8 .
+_:11e2c957-ab09-47cb-9754-150657c615ba <dgraph.type> "Topic" .
+_:11e2c957-ab09-47cb-9754-150657c615ba <Topic.name> "Frauds and Swindling" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.topic> _:11e2c957-ab09-47cb-9754-150657c615ba .
+_:ffaa96d6-5af6-466c-8c2b-0151790b671b <dgraph.type> "Topic" .
+_:ffaa96d6-5af6-466c-8c2b-0151790b671b <Topic.name> "Money Laundering" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.topic> _:ffaa96d6-5af6-466c-8c2b-0151790b671b .
+_:938fce1b-f6de-4caf-aef0-a5e9dcc06d68 <dgraph.type> "Topic" .
+_:938fce1b-f6de-4caf-aef0-a5e9dcc06d68 <Topic.name> "Banking and Financial Institutions" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.topic> _:938fce1b-f6de-4caf-aef0-a5e9dcc06d68 .
+_:73a8ba4b-cc46-4f8d-9d8b-8db5742ee8a9 <dgraph.type> "Topic" .
+_:73a8ba4b-cc46-4f8d-9d8b-8db5742ee8a9 <Topic.name> "Robberies and Thefts" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.topic> _:73a8ba4b-cc46-4f8d-9d8b-8db5742ee8a9 .
+_:fb47eee6-1f37-4ba9-b3a3-c8c745a95b6a <dgraph.type> "Topic" .
+_:fb47eee6-1f37-4ba9-b3a3-c8c745a95b6a <Topic.name> "Virtual Currency" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.topic> _:fb47eee6-1f37-4ba9-b3a3-c8c745a95b6a .
+_:7207a7e0-6e79-4c43-98cc-e42f683f3b0a <dgraph.type> "Topic" .
+_:7207a7e0-6e79-4c43-98cc-e42f683f3b0a <Topic.name> "Computers and the Internet" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.topic> _:7207a7e0-6e79-4c43-98cc-e42f683f3b0a .
+_:4f995f34-7696-410d-b078-a4d1ee148a97 <dgraph.type> "Topic" .
+_:4f995f34-7696-410d-b078-a4d1ee148a97 <Topic.name> "audio-neutral-immersive" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.topic> _:4f995f34-7696-410d-b078-a4d1ee148a97 .
+_:d7adb31c-8e55-4fa9-ab43-a459ced1029d <dgraph.type> "Topic" .
+_:d7adb31c-8e55-4fa9-ab43-a459ced1029d <Topic.name> "audio-neutral-suspenseful" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.topic> _:d7adb31c-8e55-4fa9-ab43-a459ced1029d .
+_:a26e6f17-c097-4eed-95fe-7aeb2c69d437 <dgraph.type> "Organization" .
+_:a26e6f17-c097-4eed-95fe-7aeb2c69d437 <Organization.name> "Huione Group" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.org> _:a26e6f17-c097-4eed-95fe-7aeb2c69d437 .
+_:0f2945ba-37bb-4ff9-affe-252050811d67 <dgraph.type> "Organization" .
+_:0f2945ba-37bb-4ff9-affe-252050811d67 <Organization.name> "Tether Operations Ltd" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.org> _:0f2945ba-37bb-4ff9-affe-252050811d67 .
+_:161a05a2-81ea-4863-b982-fe48325f45de <dgraph.type> "Organization" .
+_:161a05a2-81ea-4863-b982-fe48325f45de <Organization.name> "Telegram LLC" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.org> _:161a05a2-81ea-4863-b982-fe48325f45de .
+_:282dca5c-dd1b-49f6-9919-4c9c42d4845f <dgraph.type> "Geo" .
+_:282dca5c-dd1b-49f6-9919-4c9c42d4845f <Geo.name> "Phnom Penh (Cambodia)" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.geo> _:282dca5c-dd1b-49f6-9919-4c9c42d4845f .
+_:e7bd6a4e-3d86-4cf1-a226-61cd3a89c278 <dgraph.type> "Geo" .
+_:e7bd6a4e-3d86-4cf1-a226-61cd3a89c278 <Geo.name> "Cambodia" .
+_:89285c4b-ab8b-424c-9563-3236d425c2c8 <Article.geo> _:e7bd6a4e-3d86-4cf1-a226-61cd3a89c278 .
+_:2ec51336-568e-4c86-8d77-1592afa83611 <dgraph.type> "Image" .
+_:2ec51336-568e-4c86-8d77-1592afa83611 <Image.caption> "Huione is a constellation of affiliates. The headquarters of one of its companies, Huione Pay, is in Phnom Penh, Cambodia." .
+_:2ec51336-568e-4c86-8d77-1592afa83611 <Image.url> "https://static01.nyt.com/images/2025/03/10/multimedia/00int-moneylaundering-03-hpgl/00int-moneylaundering-03-hpgl-thumbStandard.jpg" .
+_:2ec51336-568e-4c86-8d77-1592afa83611 <Image.article> _:89285c4b-ab8b-424c-9563-3236d425c2c8 .
