@@ -6,5 +6,15 @@
       "path": "/graphql",
       "auth": "bearer-token"
     }
+  },
+  "connections": {
+    "dgraph": {
+      "type": "dgraph",
+      "grpcTarget": "localhost:8080"
+    },
+    "dgraph-gql": {
+      "type": "http",
+      "endpoint": "http://localhost:8080/query"
+    }
   }
 }
