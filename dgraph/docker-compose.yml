@@ -15,8 +15,7 @@ services:
       - 6080:6080
     command: >
       dgraph zero --my=zero:5080 
-      --logtostderr -v=1 
-      --telemetry sentry=false
+      --logtostderr -v=1
 
   # Dgraph Alpha hosts the graph and indexes
   alpha:
@@ -32,4 +31,3 @@ services:
       dgraph alpha --my=alpha:7080 --zero=zero:5080
         --security whitelist=0.0.0.0/0
         --logtostderr -v=1
-        --telemetry sentry=false
