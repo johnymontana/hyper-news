@@ -1,0 +1,51 @@
+{
+  "name": "@hypermode/hypernews",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "format": "prettier . --write --ignore-path .prettierignore",
+    "format:check": "prettier . --check --ignore-path .prettierignore"
+  },
+  "dependencies": {
+    "@apollo/client": "latest",
+    "@apollo/experimental-nextjs-app-support": "latest",
+    "autoprefixer": "^10.4.20",
+    "graphql": "^16.10.0",
+    "next": "^15.2.3",
+    "react": "^19",
+    "react-dom": "^19",
+    "tailwind-merge": "^2.5.5",
+    "uuid": "^11.1.0",
+    "zod": "^3.24.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "postcss": "^8",
+    "postcss-nesting": "^13.0.1",
+    "tailwindcss": "3.4.15",
+    "typescript": "^5",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.3",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jest": "^28.8.0",
+    "eslint-plugin-n": "^17.10.2",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-promise": "^7.1.0",
+    "eslint-plugin-react": "^7.34.2",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "prettier": "^3.3.3",
+    "@typescript-eslint/eslint-plugin": "^8.1.0",
+    "@typescript-eslint/parser": "^8.0.1",
+    "@typescript-eslint/typescript-estree": "^8.0.1",
+    "tailwindcss-animate": "^1.0.7"
+  }
+}
