@@ -1,5 +1,5 @@
 <Article.abstract>: string @index(term) .
-<Article.embedding>: float32vector .
+<Article.embedding>: float32vector  @index(hnsw(metric:"euclidean")) .
 <Article.geo>: [uid] .
 <Article.org>: [uid] .
 <Article.published>: datetime .
