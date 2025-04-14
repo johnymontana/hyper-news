@@ -6,24 +6,24 @@ import React from 'react';
 
 interface ArticleData {
   uid: string;
-  'Article.title': string;
-  'Article.abstract': string;
-  'Article.url': string;
-  'Article.uri': string;
+  title: string;
+  abstract: string;
+  url: string;
+  uri: string;
 }
 
 export default function Articles() {
   const { loading, error, data } = useQuery(GET_ARTICLES);
 
-  const parseArticles = (articlesJsonString: string): ArticleData[] => {
-    try {
-      const parsed = JSON.parse(articlesJsonString);
-      return parsed.data.articles;
-    } catch (e) {
-      console.error('Error parsing articles JSON:', e);
-      return [];
-    }
-  };
+  // const parseArticles = (articlesJsonString: string): ArticleData[] => {
+  //   try {
+  //     const parsed = JSON.parse(articlesJsonString);
+  //     return parsed.data.articles;
+  //   } catch (e) {
+  //     console.error('Error parsing articles JSON:', e);
+  //     return [];
+  //   }
+  // };
 
   if (loading) {
     return (
@@ -41,7 +41,7 @@ export default function Articles() {
     );
   }
 
-  const articles = data?.articles ? parseArticles(data.articles) : [];
+  const articles = data?.articles ? (data.articles) : [];
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -56,9 +56,9 @@ export default function Articles() {
               key={article.uid}
               className="border border-gray-200 p-6 rounded-lg hover:shadow-md transition-shadow duration-200"
             >
-              <a href={article['Article.url']} target="_blank" rel="noopener noreferrer" className="block">
-                <h2 className="text-xl font-semibold mb-2 hover:underline">{article['Article.title']}</h2>
-                <p className="text-gray-600 mb-3">{article['Article.abstract']}</p>
+              <a href={article.url} target="_blank" rel="noopener noreferrer" className="block">
+                <h2 className="text-xl font-semibold mb-2 hover:underline">{article.title}</h2>
+                <p className="text-gray-600 mb-3">{article.abstract}</p>
                 <div className="text-sm text-gray-500">Article ID: {article.uid}</div>
               </a>
             </li>

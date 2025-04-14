@@ -1,21 +1,28 @@
 <Article.abstract>: string @index(term) .
-<Article.embedding>: float32vector @index(hnsw(metric:"euclidean")) .
+<Article.embedding>: float32vector .
 <Article.geo>: [uid] .
 <Article.org>: [uid] .
 <Article.published>: datetime .
 <Article.title>: default .
-<Article.topic>: [uid] .
+<Article.topic>: [uid] @reverse .
 <Article.uri>: default .
 <Article.url>: default .
-<Author.article>: [uid] .
+<Author.article>: [uid] @reverse .
 <Author.name>: default .
 <Geo.name>: default .
 <Image.article>: [uid] .
 <Image.caption>: default .
 <Image.url>: default .
 <Organization.name>: default .
-<Topic.name>: default .
+<Topic.name>: string @index(fulltext) .
 <dgraph.drop.op>: string .
 <dgraph.graphql.p_query>: string @index(sha256) .
 <dgraph.graphql.schema>: string .
 <dgraph.graphql.xid>: string @index(exact) @upsert .
+type <dgraph.graphql> {
+	dgraph.graphql.schema
+	dgraph.graphql.xid
+}
+type <dgraph.graphql.persisted_query> {
+	dgraph.graphql.p_query
+}

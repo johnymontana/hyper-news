@@ -7,14 +7,24 @@
       "auth": "bearer-token"
     }
   },
+  "models": {
+    "text-generator": {
+      "sourceModel": "gpt-4o-mini",
+      "connection": "openai",
+      "path": "v1/chat/completions"
+    }
+  },
   "connections": {
+    "openai": {
+      "type": "http",
+      "baseUrl": "https://api.openai.com/",
+      "headers": {
+        "Authorization": "Bearer {{API_KEY}}"
+      }
+    },
     "dgraph": {
       "type": "dgraph",
-      "grpcTarget": "localhost:8080"
-    },
-    "dgraph-gql": {
-      "type": "http",
-      "endpoint": "http://localhost:8080/query"
+      "grpcTarget": "localhost:9080"
     }
   }
 }

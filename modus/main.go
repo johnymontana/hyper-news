@@ -1,72 +1,252 @@
 package main
 
 import (
-	"encoding/json"
+	"errors"
 	"fmt"
+	"strings"
+
+	"encoding/json"
 
 	_ "github.com/hypermodeinc/modus/sdk/go"
-	"github.com/hypermodeinc/modus/sdk/go/pkg/console"
-	"github.com/hypermodeinc/modus/sdk/go/pkg/http"
+	"github.com/hypermodeinc/modus/sdk/go/pkg/dgraph"
+	"github.com/hypermodeinc/modus/sdk/go/pkg/models"
+	"github.com/hypermodeinc/modus/sdk/go/pkg/models/openai"
+	"github.com/tidwall/gjson"
 )
 
-type Article struct {
-	ID       string `json:"uid"`
-	Title    string `json:"Article.title,omitempty"`
-	Abstract string `json:"Article.abstract,omitempty"`
-	URL      string `json:"Article.url,omitempty"`
-	URI      string `json:"Article.uri,omitempty"`
+var connection = "dgraph"
+
+type Person struct {
+	Uid   string   `json:"uid,omitempty"`
+	Name  string   `json:"Person.name,omitempty"`
+	DType []string `json:"dgraph.type,omitempty"`
 }
 
-func GetArticles() (string, error) {
-	query := `{
-		articles(func: type(Article)) {
+type Article struct {
+	Uid          string          `json:"uid,omitempty"`
+	Title        string          `json:"Article.title,omitempty"`
+	Abstract     string          `json:"Article.abstract,omitempty"`
+	Url          string          `json:"Article.url,omitempty"`
+	People       []*Person       `json:"Article.person,omitempty"`
+	Author       []*Person       `json:"Article.author,omitempty"`
+	Organization []*Organization `json:"Article.org,omitempty"`
+	Topic        []*Topic        `json:"Article.topic,omitempty"`
+	Geo          []*Geo          `json:"Article.geo,omitempty"`
+}
+
+type Geo struct {
+	Uid  string `json:"uid,omitempty"`
+	Name string `json:"Geo.name,omitempty"`
+}
+
+type Organization struct {
+	Uid  string `json:"uid,omitempty"`
+	Name string `json:"Organization.name,omitempty"`
+}
+
+type Topic struct {
+	Uid      string     `json:"uid,omitempty"`
+	Name     string     `json:"Topic.name,omitempty"`
+	Articles []*Article `json:"Topic.Article,omitempty"`
+}
+
+type TopicData struct {
+	Topics []*Topic `json:"topics"`
+}
+
+type ArticleData struct {
+	Articles []*Article `json:"articles"`
+}
+
+type PeopleData struct {
+	People []*Person `json:"people"`
+}
+
+func QuerySimilar(query *string) ([]*Article, error) {
+	// TODO: embed query and search
+	return nil, nil
+}
+
+func QueryLocations(location *string) ([]*Article, error) {
+	// TODO: add index to locations and search for them by fulltext
+	return nil, nil
+}
+
+func QueryTopics(topic string) ([]*Topic, error) {
+	query := dgraph.NewQuery(`
+	query queryTopics($topic: string!) {
+  topics(func: anyoftext(Topic.name, $topic), first: 10) {
+   Topic.name 
+    uid
+    Topic.articles: ~Article.topic {
+      Article.title
+      Article.abstract
+    	~Author.article {
+        Author.name
+      }
+      Article.org {
+        Organization.name
+      }
+      Article.topic {
+        Topic.name
+      }
+    }
+  }
+}
+`).WithVariable("$topic", topic)
+
+	response, err := dgraph.ExecuteQuery(connection, query)
+	if err != nil {
+		return nil, err
+	}
+
+	var topicData TopicData
+	if err := json.Unmarshal([]byte(response.Json), &topicData); err != nil {
+		return nil, err
+	}
+
+	return topicData.Topics, nil
+}
+
+// QueryArticles retrieves articles from the database
+// If num is nil, it defaults to 10 articles
+func QueryArticles(num int) ([]*Article, error) {
+
+	query := dgraph.NewQuery(`
+
+	query queryArticles($num: int!) {
+		articles(func: type(Article), orderdesc:Article.published,first: $num) {
 			uid
 			Article.title
 			Article.abstract
 			Article.url
-			Article.uri
+			
+			Article.geo {
+			}
+
+			Article.org {
+			Organization.name
+			}
+
+			Article.topic {
+			Topic.name
+			}
+
+
+			dgraph.type
 		}
-	}`
-	
-	return executeDgraphQuery(query)
+	}
+	`).WithVariable("$num", num)
+
+	// Execute the query with variables
+	response, err := dgraph.ExecuteQuery(connection, query)
+	if err != nil {
+		return nil, err
+	}
+
+	var articleData ArticleData
+	if err := json.Unmarshal([]byte(response.Json), &articleData); err != nil {
+		return nil, err
+	}
+
+	return articleData.Articles, nil
 }
 
-func executeDgraphQuery(query string) (string, error) {
-	queryPayload := map[string]string{"query": query}
-	
-	options := &http.RequestOptions{
-		Method: "POST",
-		Body:   queryPayload,
-		Headers: map[string]string{
-			"Content-Type": "application/json",
-		},
-	}
-	
-	request := http.NewRequest("http://localhost:8080/query", options)
-	response, err := http.Fetch(request)
+func QueryPeople() ([]*Person, error) {
+	query := dgraph.NewQuery(`
+	{
+		people(func: has(dgraph.type, "Person")) {
+			uid
+			firstName
+			lastName
+			dgraph.type
+		}
+		}
+	`)
+
+	response, err := dgraph.ExecuteQuery(connection, query)
 	if err != nil {
-		console.Log("Error fetching data from Dgraph: " + err.Error())
+		return nil, err
+	}
+
+	var peopleData PeopleData
+	if err := json.Unmarshal([]byte(response.Json), &peopleData); err != nil {
+		return nil, err
+	}
+
+	return peopleData.People, nil
+}
+
+func SayHello(name *string) string {
+
+	var s string
+	if name == nil {
+		s = "World"
+	} else {
+		s = *name
+	}
+
+	return fmt.Sprintf("Hello, %s!", s)
+}
+
+func GenerateTextWithTools(prompt string) (string, error) {
+	model, err := models.GetModel[openai.ChatModel]("text-generator")
+	if err != nil {
 		return "", err
 	}
-	
-	if !response.Ok() {
-		return "", fmt.Errorf("Dgraph query failed: %d %s", response.Status, response.StatusText)
-	}
-	
-	return string(response.Body), nil
-}
 
-func ParseArticles(jsonResponse string) ([]Article, error) {
-	var result struct {
-		Data struct {
-			Articles []Article `json:"articles"`
-		} `json:"data"`
-	}
-	
-	err := json.Unmarshal([]byte(jsonResponse), &result)
+	instruction := `
+	You are a helpful assistant who is very knowledgeable about recent news. Use your tools to answer the user's question.`
+
+	input, err := model.CreateInput(
+		openai.NewSystemMessage(instruction),
+		openai.NewUserMessage(prompt),
+	)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing articles JSON: %w", err)
+		return "", err
 	}
-	
-	return result.Data.Articles, nil
+
+	input.Temperature = 0.2
+
+	input.Tools = []openai.Tool{
+		openai.NewToolForFunction("QueryArticles", "Queries news articles from the database, sorted by publication date returning the newest first.").WithParameter("num", "integer", "Number of articles to return"),
+	}
+
+	for {
+		output, err := model.Invoke(input)
+		if err != nil {
+			return "", err
+		}
+
+		msg := output.Choices[0].Message
+
+		if len(msg.ToolCalls) > 0 {
+			input.Messages = append(input.Messages, msg.ToAssistantMessage())
+
+			for _, tc := range msg.ToolCalls {
+				var toolMsg *openai.ToolMessage[string]
+				switch tc.Function.Name {
+				case "QueryArticles":
+					// Convert int64 to int and create a pointer to it
+					numInt64 := gjson.Get(tc.Function.Arguments, "num").Int()
+					numInt := int(numInt64)
+					if result, err := QueryArticles(numInt); err == nil {
+						toolMsg = openai.NewToolMessage(result, tc.Id)
+					} else {
+						toolMsg = openai.NewToolMessage(err, tc.Id)
+					}
+
+				default:
+					return "", fmt.Errorf("unknown tool call: %s", tc.Function.Name)
+				}
+
+				input.Messages = append(input.Messages, toolMsg)
+
+			}
+		} else if msg.Content != "" {
+			return strings.TrimSpace(msg.Content), nil
+		} else {
+			return "", errors.New("invalid response from model")
+		}
+	}
 }
