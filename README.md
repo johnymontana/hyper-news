@@ -11,14 +11,32 @@ This project uses data from the [New York Times developer API.](https://develope
 Register for a free NYTimes developer account, create an API key, then fetch article data:
 
 ```bash
-wget --directory-prefix=data/articles/nyt https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=yourkey
+wget --directory-prefix=data/articles/nyt/article_versions -O data/articles/nyt/article_versions/data.json https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=yourkey
 ```
 
 Then use the included Python script to convert article JSON data to RDF N-Quad format to import into Dgraph
 
+First create a venv in the root of the project:
+
 ```bash
-python3 data/articles article_json_to_rdf.py
+python3 -m venv venv
 ```
+
+Then you can enter the venv and install the requirements:
+
+Enter venv:
+
+```bash
+source venv/bin/activate
+```
+
+Then run the script to convert the JSON data to RDF:
+
+```bash
+cd ./data/articles && python3 article_json_to_rdf.py
+```
+
+This will output `nyt_articles_versions.rdf` in the `data/articles/` directory.
 
 ## Dgraph
 
@@ -38,7 +56,7 @@ docker exec -it news_graph_alpha /bin/bash
 To load the RDF generated in the previous step:
 
 ```bash
-dgraph live -f /data/articles/nyt_articles.rdf  --zero localhost:5080
+dgraph live -f /data/articles/nyt_articles_versions.rdf --zero zero:5080
 ```
 
 Open [ratel.hypermode.com](https://ratel.hypermode.com), connect to `http://localhost:8080` then query your graph:
