@@ -196,7 +196,20 @@ func GenerateTextWithTools(prompt string) (string, error) {
 	}
 
 	instruction := `
-	You are a helpful assistant who is very knowledgeable about recent news. Use your tools to answer the user's question.`
+	You are a helpful assistant who is very knowledgeable about recent news. Use your tools to answer the user's question.
+	
+	Important: When returning articles, ALWAYS format your response as a valid JSON array of article objects with the following structure:
+	[
+		{
+			"uid": "article-1",
+			"title": "Article Title",
+			"abstract": "Brief description of the article",
+			"url": "https://full-url-to-article.com",
+			"uri": "https://full-url-to-article.com"
+		}
+	]
+	
+	Your response MUST be valid JSON with no surrounding text or markdown formatting. Only include the JSON array of articles.`
 
 	input, err := model.CreateInput(
 		openai.NewSystemMessage(instruction),
@@ -241,10 +254,25 @@ func GenerateTextWithTools(prompt string) (string, error) {
 				}
 
 				input.Messages = append(input.Messages, toolMsg)
-
 			}
 		} else if msg.Content != "" {
-			return strings.TrimSpace(msg.Content), nil
+			content := strings.TrimSpace(msg.Content)
+			
+			if strings.HasPrefix(content, "```json") {
+				content = strings.TrimPrefix(content, "```json")
+				if idx := strings.LastIndex(content, "```"); idx != -1 {
+					content = content[:idx]
+				}
+				content = strings.TrimSpace(content)
+			} else if strings.HasPrefix(content, "```") {
+				content = strings.TrimPrefix(content, "```")
+				if idx := strings.LastIndex(content, "```"); idx != -1 {
+					content = content[:idx]
+				}
+				content = strings.TrimSpace(content)
+			}
+			
+			return content, nil
 		} else {
 			return "", errors.New("invalid response from model")
 		}
