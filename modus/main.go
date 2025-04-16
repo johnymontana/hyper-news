@@ -47,7 +47,7 @@ type Organization struct {
 type Topic struct {
 	Uid      string     `json:"uid,omitempty"`
 	Name     string     `json:"Topic.name,omitempty"`
-	Articles []*Article `json:"Topic.Article,omitempty"`
+	Articles []*Article `json:"Topic.article,omitempty"`
 }
 
 type TopicData struct {
@@ -78,10 +78,10 @@ func QueryTopics(topic string) ([]*Topic, error) {
   topics(func: anyoftext(Topic.name, $topic), first: 10) {
    Topic.name 
     uid
-    Topic.articles: ~Article.topic {
+    Topic.article: ~Article.topic {
       Article.title
       Article.abstract
-    	~Author.article {
+      Article.author: ~Author.article {
         Author.name
       }
       Article.org {
@@ -257,7 +257,7 @@ func GenerateTextWithTools(prompt string) (string, error) {
 			}
 		} else if msg.Content != "" {
 			content := strings.TrimSpace(msg.Content)
-			
+
 			if strings.HasPrefix(content, "```json") {
 				content = strings.TrimPrefix(content, "```json")
 				if idx := strings.LastIndex(content, "```"); idx != -1 {
@@ -271,7 +271,7 @@ func GenerateTextWithTools(prompt string) (string, error) {
 				}
 				content = strings.TrimSpace(content)
 			}
-			
+
 			return content, nil
 		} else {
 			return "", errors.New("invalid response from model")
