@@ -12,6 +12,11 @@
       "sourceModel": "gpt-4o-mini",
       "connection": "openai",
       "path": "v1/chat/completions"
+    },
+    "nomic-embed": {
+      "sourceModel": "nomic-ai/nomic-embed-text-v1.5",
+      "connection": "hypermode-router",
+      "path": "v1/embeddings"
     }
   },
   "connections": {
@@ -22,9 +27,16 @@
         "Authorization": "Bearer {{API_KEY}}"
       }
     },
+    "hypermode-router": {
+      "type": "http",
+      "baseUrl": "https://models.hypermode.host/",
+      "headers": {
+        "Authorization": "Bearer {{TOKEN}}"
+      }
+    },
     "dgraph": {
       "type": "dgraph",
-      "grpcTarget": "localhost:9080"
+      "connString": "dgraph://hyper-news-labs.hypermode.host:443?sslmode=verify-ca&bearertoken=BroutcRLCwUbKU"
     }
   }
 }

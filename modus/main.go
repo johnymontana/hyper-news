@@ -22,21 +22,27 @@ type Person struct {
 	DType []string `json:"dgraph.type,omitempty"`
 }
 
+type Author struct {
+	Uid  string `json:"uid,omitempty"`
+	Name string `json:"Author.name,omitempty"`
+}
+
 type Article struct {
-	Uid          string          `json:"uid,omitempty"`
-	Title        string          `json:"Article.title,omitempty"`
-	Abstract     string          `json:"Article.abstract,omitempty"`
-	Url          string          `json:"Article.url,omitempty"`
-	People       []*Person       `json:"Article.person,omitempty"`
-	Author       []*Person       `json:"Article.author,omitempty"`
-	Organization []*Organization `json:"Article.org,omitempty"`
-	Topic        []*Topic        `json:"Article.topic,omitempty"`
-	Geo          []*Geo          `json:"Article.geo,omitempty"`
+	Uid           string          `json:"uid,omitempty"`
+	Title         string          `json:"Article.title,omitempty"`
+	Abstract      string          `json:"Article.abstract,omitempty"`
+	Url           string          `json:"Article.url,omitempty"`
+	People        []*Person       `json:"Article.person,omitempty"`
+	Authors       []*Author       `json:"Article.author,omitempty"`
+	Organizations []*Organization `json:"Article.org,omitempty"`
+	Topics        []*Topic        `json:"Article.topic,omitempty"`
+	Geos          []*Geo          `json:"Article.geo,omitempty"`
 }
 
 type Geo struct {
-	Uid  string `json:"uid,omitempty"`
-	Name string `json:"Geo.name,omitempty"`
+	Uid      string `json:"uid,omitempty"`
+	Name     string `json:"Geo.name,omitempty"`
+	Location string `json:"Geo.location,omitempty"`
 }
 
 type Organization struct {
@@ -45,13 +51,19 @@ type Organization struct {
 }
 
 type Topic struct {
-	Uid      string     `json:"uid,omitempty"`
-	Name     string     `json:"Topic.name,omitempty"`
-	Articles []*Article `json:"Topic.article,omitempty"`
+	Uid  string `json:"uid,omitempty"`
+	Name string `json:"Topic.name,omitempty"`
+	// Articles []*Article `json:"Topic.article,omitempty"`
 }
 
 type TopicData struct {
-	Topics []*Topic `json:"topics"`
+	Topics []*SearchTopic `json:"topics"`
+}
+
+type SearchTopic struct {
+	Uid      string     `json:"uid,omitempty"`
+	Name     string     `json:"Topic.name,omitempty"`
+	Articles []*Article `json:"Topic.article,omitempty"`
 }
 
 type ArticleData struct {
@@ -62,9 +74,76 @@ type PeopleData struct {
 	People []*Person `json:"people"`
 }
 
-func QuerySimilar(query *string) ([]*Article, error) {
+func GetEmbeddingsForText(texts ...string) ([][]float32, error) {
+	model, err := models.GetModel[openai.EmbeddingsModel]("nomic-embed")
+
+	if err != nil {
+		return nil, err
+	}
+
+	input, err := model.CreateInput(texts)
+	if err != nil {
+		return nil, err
+	}
+
+	output, err := model.Invoke(input)
+	if err != nil {
+		return nil, err
+	}
+
+	results := make([][]float32, len(output.Data))
+	for i, d := range output.Data {
+		results[i] = d.Embedding
+	}
+
+	return results, nil
+}
+
+func QuerySimilar(userQuery *string) ([]*Article, error) {
 	// TODO: embed query and search
-	return nil, nil
+
+	embedding, err := GetEmbeddingsForText(*userQuery)
+	if err != nil {
+		return nil, err
+	}
+
+	query := dgraph.NewQuery(`
+	query vector_search($embedding: string) {
+		articles(func: similar_to(Article.embedding, 100, $embedding)) {
+		  uid
+			Article.title
+			Article.abstract
+			Article.url
+			Article.geo {
+				Geo.name
+			}
+
+			Article.org {
+			Organization.name
+			}
+
+			Article.topic {
+			Topic.name
+			}
+
+
+			dgraph.type
+		}
+	  }
+	`).WithVariable("$embedding", embedding[0])
+
+	response, err := dgraph.ExecuteQuery(connection, query)
+	if err != nil {
+		return nil, err
+	}
+
+	var articleData ArticleData
+	if err := json.Unmarshal([]byte(response.Json), &articleData); err != nil {
+		return nil, err
+	}
+	fmt.Printf("ArticleData: %+v\n", articleData)
+
+	return articleData.Articles, nil
 }
 
 func QueryLocations(location *string) ([]*Article, error) {
@@ -72,7 +151,7 @@ func QueryLocations(location *string) ([]*Article, error) {
 	return nil, nil
 }
 
-func QueryTopics(topic string) ([]*Topic, error) {
+func QueryTopics(topic string) ([]*SearchTopic, error) {
 	query := dgraph.NewQuery(`
 	query queryTopics($topic: string!) {
   topics(func: anyoftext(Topic.name, $topic), first: 10) {
@@ -90,6 +169,10 @@ func QueryTopics(topic string) ([]*Topic, error) {
       Article.topic {
         Topic.name
       }
+	Article.geo {
+		Geo.name
+		Geo.location
+	  }
     }
   }
 }
@@ -122,6 +205,7 @@ func QueryArticles(num int) ([]*Article, error) {
 			Article.url
 			
 			Article.geo {
+				Geo.name
 			}
 
 			Article.org {
@@ -132,6 +216,13 @@ func QueryArticles(num int) ([]*Article, error) {
 			Topic.name
 			}
 
+			Article.person {
+			Person.name
+			}
+
+			Article.author: ~Author.article {
+			Author.name
+			}
 
 			dgraph.type
 		}
@@ -177,18 +268,6 @@ func QueryPeople() ([]*Person, error) {
 	return peopleData.People, nil
 }
 
-func SayHello(name *string) string {
-
-	var s string
-	if name == nil {
-		s = "World"
-	} else {
-		s = *name
-	}
-
-	return fmt.Sprintf("Hello, %s!", s)
-}
-
 func GenerateTextWithTools(prompt string) (string, error) {
 	model, err := models.GetModel[openai.ChatModel]("text-generator")
 	if err != nil {
@@ -223,6 +302,7 @@ func GenerateTextWithTools(prompt string) (string, error) {
 
 	input.Tools = []openai.Tool{
 		openai.NewToolForFunction("QueryArticles", "Queries news articles from the database, sorted by publication date returning the newest first.").WithParameter("num", "integer", "Number of articles to return"),
+		openai.NewToolForFunction("QueryTopics", "Queries news topics from the database, sorted by publication date returning the newest first.").WithParameter("topic", "string", "Topic to search for"),
 	}
 
 	for {
@@ -244,6 +324,14 @@ func GenerateTextWithTools(prompt string) (string, error) {
 					numInt64 := gjson.Get(tc.Function.Arguments, "num").Int()
 					numInt := int(numInt64)
 					if result, err := QueryArticles(numInt); err == nil {
+						toolMsg = openai.NewToolMessage(result, tc.Id)
+					} else {
+						toolMsg = openai.NewToolMessage(err, tc.Id)
+					}
+
+				case "QueryTopics":
+					topic := gjson.Get(tc.Function.Arguments, "topic").String()
+					if result, err := QueryTopics(topic); err == nil {
 						toolMsg = openai.NewToolMessage(result, tc.Id)
 					} else {
 						toolMsg = openai.NewToolMessage(err, tc.Id)

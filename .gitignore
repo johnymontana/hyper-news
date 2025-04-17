@@ -144,3 +144,5 @@ temp.graphql
 repomix-output.xml
 data.json
 nyt_articles_versions.rdf
+
+viewed_*.json
