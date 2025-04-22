@@ -36,7 +36,14 @@
     },
     "dgraph": {
       "type": "dgraph",
-      "connString": "dgraph://hyper-news-labs.hypermode.host:443?sslmode=verify-ca&bearertoken=BroutcRLCwUbKU"
+      "connString": "dgraph://hyper-news-labs.hypermode.host:443?sslmode=verify-ca&bearertoken={{TOKEN}}"
+    },
+    "dgraph-http": {
+      "type": "http",
+      "baseUrl": "https://hyper-news-labs.hypermode.host:443/",
+      "headers": {
+        "Authorization": "Bearer {{TOKEN}}"
+      }
     }
   }
 }
