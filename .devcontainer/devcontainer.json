@@ -1,0 +1,34 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/go
+{
+	"name": "Go",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/universal:focal",
+	// "build": {
+	// 	// Path is relative to the devcontainer.json file.
+	// 	"dockerfile": "Dockerfile"
+	// },
+	"postCreateCommand": "wget https://github.com/tinygo-org/tinygo/releases/download/v0.37.0/tinygo_0.37.0_amd64.deb && sudo dpkg -i tinygo_0.37.0_amd64.deb && rm tinygo_0.37.0_amd64.deb && npm i -g @hypermode/hyp-cli && npm i -g @hypermode/modus-cli && modus sdk install go --force",
+	// "features": {
+	// 	"ghcr.io/devcontainers/features/node:1": {},
+	// 	"ghcr.io/devcontainers-community/features/tinygo:1": {}
+	// },
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "go version",
+	// Configure tool-specific properties.
+	// "customizations": {},
+	"customizations": {
+		"codespaces": {
+			"openFiles": [
+				"README.md",
+				"modus/main.go"
+			]
+		}
+	}
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
