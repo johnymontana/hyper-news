@@ -20,7 +20,7 @@ def json_to_nquads(articles):
     all_nquads = []
     
     for article in articles:
-        article_uid = f"_:{uuid.uuid4()}"
+        article_uid = f"_:{article['id']}"
         
         # Article basic info
         all_nquads.append(f'{article_uid} <dgraph.type> "Article" .')
@@ -44,7 +44,7 @@ def json_to_nquads(articles):
         if "byline" in article:
             authors = parse_byline(article["byline"])
             for author_name in authors:
-                author_uid = f"_:{uuid.uuid4()}"
+                author_uid = f"_:{author_name}"
                 all_nquads.append(f'{author_uid} <dgraph.type> "Author" .')
                 all_nquads.append(f'{author_uid} <Author.name> "{escape_string(author_name)}" .')
                 all_nquads.append(f'{author_uid} <Author.article> {article_uid} .')
@@ -52,7 +52,7 @@ def json_to_nquads(articles):
         # Topics (des_facet)
         if "des_facet" in article and isinstance(article["des_facet"], list):
             for topic in article["des_facet"]:
-                topic_uid = f"_:{uuid.uuid4()}"
+                topic_uid = f"_:{topic}"
                 all_nquads.append(f'{topic_uid} <dgraph.type> "Topic" .')
                 all_nquads.append(f'{topic_uid} <Topic.name> "{escape_string(topic)}" .')
                 all_nquads.append(f'{article_uid} <Article.topic> {topic_uid} .')
@@ -60,15 +60,22 @@ def json_to_nquads(articles):
         # Organizations (org_facet)
         if "org_facet" in article and isinstance(article["org_facet"], list):
             for org in article["org_facet"]:
-                org_uid = f"_:{uuid.uuid4()}"
+                org_uid = f"_:{org}"
                 all_nquads.append(f'{org_uid} <dgraph.type> "Organization" .')
                 all_nquads.append(f'{org_uid} <Organization.name> "{escape_string(org)}" .')
                 all_nquads.append(f'{article_uid} <Article.org> {org_uid} .')
+
+        if "per_facet" in article and isinstance(article["per_facet"], list):
+            for person in article["per_facet"]:
+                person_uid = f"_:{person}"
+                all_nquads.append(f'{person_uid} <dgraph.type> "Person" .')
+                all_nquads.append(f'{person_uid} <Person.name> "{escape_string(person)}" .')
+                all_nquads.append(f'{article_uid} <Article.person> {person_uid} .')
         
         # Geo locations (geo_facet)
         if "geo_facet" in article and isinstance(article["geo_facet"], list):
             for geo in article["geo_facet"]:
-                geo_uid = f"_:{uuid.uuid4()}"
+                geo_uid = f"_:{geo}"
                 all_nquads.append(f'{geo_uid} <dgraph.type> "Geo" .')
                 all_nquads.append(f'{geo_uid} <Geo.name> "{escape_string(geo)}" .')
                 all_nquads.append(f'{article_uid} <Article.geo> {geo_uid} .')
