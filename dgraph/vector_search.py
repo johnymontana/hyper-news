@@ -5,9 +5,7 @@ Takes a string input, generates an embedding, and finds similar articles in Dgra
 """
 
 import json
-import sys
 import argparse
-import numpy as np
 import requests
 import pydgraph
 
