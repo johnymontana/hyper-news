@@ -2,6 +2,7 @@ import json
 import uuid
 import os
 import re
+from geocode_ollama import geocode_location
 
 def parse_byline(byline):
     """Extract author names from byline like 'By Author1, Author2 and Author3'"""
@@ -16,11 +17,16 @@ def parse_byline(byline):
     authors = re.split(r',\s*|\s+and\s+', byline)
     return [author.strip() for author in authors if author.strip()]
 
+def trim_all_whitespace(text):
+    no_whitespace = ''.join(text.split())
+    clean_text = re.sub(r'[^a-zA-Z0-9]', '', no_whitespace)
+    return clean_text
+
 def json_to_nquads(articles):
     all_nquads = []
     
     for article in articles:
-        article_uid = f"_:{article['id']}"
+        article_uid = f"_:Article_{article['id']}"
         
         # Article basic info
         all_nquads.append(f'{article_uid} <dgraph.type> "Article" .')
@@ -44,7 +50,7 @@ def json_to_nquads(articles):
         if "byline" in article:
             authors = parse_byline(article["byline"])
             for author_name in authors:
-                author_uid = f"_:{author_name}"
+                author_uid = f"_:Author_{trim_all_whitespace(author_name)}"
                 all_nquads.append(f'{author_uid} <dgraph.type> "Author" .')
                 all_nquads.append(f'{author_uid} <Author.name> "{escape_string(author_name)}" .')
                 all_nquads.append(f'{author_uid} <Author.article> {article_uid} .')
@@ -52,7 +58,7 @@ def json_to_nquads(articles):
         # Topics (des_facet)
         if "des_facet" in article and isinstance(article["des_facet"], list):
             for topic in article["des_facet"]:
-                topic_uid = f"_:{topic}"
+                topic_uid = f"_:Topic_{trim_all_whitespace(topic)}"
                 all_nquads.append(f'{topic_uid} <dgraph.type> "Topic" .')
                 all_nquads.append(f'{topic_uid} <Topic.name> "{escape_string(topic)}" .')
                 all_nquads.append(f'{article_uid} <Article.topic> {topic_uid} .')
@@ -60,14 +66,14 @@ def json_to_nquads(articles):
         # Organizations (org_facet)
         if "org_facet" in article and isinstance(article["org_facet"], list):
             for org in article["org_facet"]:
-                org_uid = f"_:{org}"
+                org_uid = f"_:Organization_{trim_all_whitespace(org)}"
                 all_nquads.append(f'{org_uid} <dgraph.type> "Organization" .')
                 all_nquads.append(f'{org_uid} <Organization.name> "{escape_string(org)}" .')
                 all_nquads.append(f'{article_uid} <Article.org> {org_uid} .')
 
         if "per_facet" in article and isinstance(article["per_facet"], list):
             for person in article["per_facet"]:
-                person_uid = f"_:{person}"
+                person_uid = f"_:Person_{trim_all_whitespace(person)}"
                 all_nquads.append(f'{person_uid} <dgraph.type> "Person" .')
                 all_nquads.append(f'{person_uid} <Person.name> "{escape_string(person)}" .')
                 all_nquads.append(f'{article_uid} <Article.person> {person_uid} .')
@@ -75,9 +81,20 @@ def json_to_nquads(articles):
         # Geo locations (geo_facet)
         if "geo_facet" in article and isinstance(article["geo_facet"], list):
             for geo in article["geo_facet"]:
-                geo_uid = f"_:{geo}"
+
+                try:
+                    geojsonstr = geocode_location(geo)
+                except Exception as e:
+                    print(f"Error geocoding location '{geo}': {str(e)}")
+                    continue
+
+                geo_uid = f"_:Geo_{trim_all_whitespace(geo)}"
                 all_nquads.append(f'{geo_uid} <dgraph.type> "Geo" .')
                 all_nquads.append(f'{geo_uid} <Geo.name> "{escape_string(geo)}" .')
+
+                if geojsonstr:
+                    all_nquads.append(f'{geo_uid} <Geo.location> "{geojsonstr}"^^<geo:geojson> .')
+
                 all_nquads.append(f'{article_uid} <Article.geo> {geo_uid} .')
         
         # Images
@@ -139,6 +156,6 @@ def main(directory, output_file):
 
 if __name__ == "__main__":
     # Replace with your directory containing JSON files
-    input_directory = "nyt/article_versions"
+    input_directory = "nyt/test"
     output_file = "nyt_articles_versions.rdf"
     main(input_directory, output_file)
