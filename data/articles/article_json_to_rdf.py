@@ -3,6 +3,7 @@ import uuid
 import os
 import re
 from geocode_ollama import geocode_location
+from hypermode_embeddings import get_embeddings
 
 def parse_byline(byline):
     """Extract author names from byline like 'By Author1, Author2 and Author3'"""
@@ -36,6 +37,13 @@ def json_to_nquads(articles):
         
         if "abstract" in article:
             all_nquads.append(f'{article_uid} <Article.abstract> "{escape_string(article["abstract"])}" .')
+
+            try:
+                # Generate embeddings for abstract
+                embeddings = get_embeddings(article["abstract"])
+                all_nquads.append(f'{article_uid} <Article.embedding> "{embeddings}" .')
+            except ValueError as e:
+                print(f"Error generating embeddings for abstract: {str(e)}")
         
         if "uri" in article:
             all_nquads.append(f'{article_uid} <Article.uri> "{escape_string(article["uri"])}" .')
