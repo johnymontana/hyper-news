@@ -27,7 +27,7 @@ upload-data:
 	echo "Using host: $$HOST"; \
 	echo "Using token: $$TOKEN"; \
 	(echo '{ set {'; cat data/articles/nyt_articles_versions.rdf; echo '}}') > /tmp/wrapped_data.rdf; \
-	curl -v -X POST https://$$HOST/dgraph/mutate \
+	curl -v -X POST https://$$HOST/dgraph/mutate?commitNow=true \
 		--header "Authorization: Bearer $$TOKEN" \
 		--header "Content-Type: application/rdf" \
 		--data-binary "@/tmp/wrapped_data.rdf"; 
