@@ -1,6 +1,6 @@
 <Article.abstract>: string @index(term) .
-<Article.embedding>: float32vector .
-<Article.geo>: [uid] .
+<Article.embedding>: float32vector @index(hnsw(metric:"euclidean")) .
+<Article.geo>: [uid] @reverse .
 <Article.org>: [uid] .
 <Article.person>: [uid] .
 <Article.published>: datetime .
@@ -10,7 +10,7 @@
 <Article.url>: default .
 <Author.article>: [uid] @reverse .
 <Author.name>: default .
-<Geo.location>: geo .
+<Geo.location>: geo @index(geo) .
 <Geo.name>: default .
 <Image.article>: [uid] .
 <Image.caption>: default .

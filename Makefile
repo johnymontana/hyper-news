@@ -1,4 +1,4 @@
-.PHONY: help upload-data parse-env start-mcp clean
+.PHONY: help upload-data parse-env start-mcp start-modus clean
 
 # Default target
 help:
@@ -6,6 +6,7 @@ help:
 	@echo "  make help         - Show this help message"
 	@echo "  make upload-data  - Upload article data to Dgraph"
 	@echo "  make parse-env    - Parse Dgraph connection string from .env file"
+	@echo "  make start-modus  - Start the Modus server locally"
 	@echo "  make start-mcp    - Start the MCP server"
 	@echo "  make clean        - Clean up generated files"
 
@@ -67,6 +68,21 @@ parse-env:
 start-mcp:
 	@echo "Starting Dgraph MCP server..."
 	cd mcp-server && modus dev
+
+# Start the Modus server
+start-modus:
+	@echo "Starting Modus server..."
+	cd modus && modus dev
+
+
+# export environment variables from .env file
+export-env:
+	@echo "Exporting environment variables from .env file..."
+	@if [ ! -f .env ]; then \
+		echo "Error: .env file not found"; \
+		exit 1; \
+	fi
+	@source .env
 
 # Clean up generated files
 clean:

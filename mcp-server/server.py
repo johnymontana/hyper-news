@@ -4,8 +4,10 @@ from typing import Dict, Optional, Any
 
 import pydgraph
 from mcp.server.fastmcp import FastMCP
+from hypermode_embeddings import get_embeddings
 
 # Initialize Dgraph client
+# TODO: use dgraph:// connection string and auth key
 def get_dgraph_client():
     """Create and return a Dgraph client instance"""
     # Get Dgraph Alpha host from environment or use default
@@ -130,6 +132,39 @@ def run_dql_mutation(mutation: str, set_json: Optional[Dict] = None, delete_json
         if 'txn' in locals():
             txn.discard()
         return f"Error executing mutation: {str(e)}"
+
+@mcp.tool()
+def article_similarity_search(query: str, k: int = 5) -> str:
+    """
+    Run a similarity search for articles based on a query
+    """
+
+    embedding = get_embeddings(query)
+    client = get_dgraph_client()
+
+    try:
+        txn = client.txn(read_only=True)
+        response = txn.query(
+            """
+            query vector_search($embedding: string, $limit: int) {
+          articles(func: similar_to(Article.embedding, $limit, $embedding)) {
+            uid
+            Article.title
+            Article.abstract
+            Article.topic {
+              Topic.name
+            }
+
+            """,
+            variables={"k": k, "embedding": embedding}
+        )
+
+        return response.json.decode('utf-8')
+    except Exception as e:
+        return f"Error executing similarity search: {str(e)}"
+    finally:
+        if 'txn' in locals():
+            txn.discard()
 
 @mcp.resource("dgraph://info")
 def dgraph_info() -> Dict[str, str]:
