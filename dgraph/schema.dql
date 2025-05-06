@@ -1,7 +1,8 @@
 <Article.abstract>: string @index(term) .
-<Article.embedding>: float32vector  @index(hnsw(metric:"euclidean")) .
+<Article.embedding>: float32vector .
 <Article.geo>: [uid] .
 <Article.org>: [uid] .
+<Article.person>: [uid] .
 <Article.published>: datetime .
 <Article.title>: default .
 <Article.topic>: [uid] @reverse .
@@ -9,11 +10,13 @@
 <Article.url>: default .
 <Author.article>: [uid] @reverse .
 <Author.name>: default .
+<Geo.location>: geo .
 <Geo.name>: default .
 <Image.article>: [uid] .
 <Image.caption>: default .
 <Image.url>: default .
 <Organization.name>: default .
+<Person.name>: default .
 <Topic.name>: string @index(fulltext) .
 <dgraph.drop.op>: string .
 <dgraph.graphql.p_query>: string @index(sha256) .

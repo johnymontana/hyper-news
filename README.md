@@ -110,10 +110,10 @@ _:2ec51336-568e-4c86-8d77-1592afa83611 <Image.article> _:89285c4b-ab8b-424c-9563
 Or using curl to upload the `data/articles/nyt_example_article.rdf` file:
 
 ```bash
-curl -X POST https://<YOUR_DGRAPH_URI>/dgraph/commit \
-    --header "Authorization: Bearer {{TOKEN}}" \
+curl -v -X POST https://<YOUR_HYPERMODE_GRAPH>.hypermode.host/dgraph/mutate \
+    --header "Authorization: Bearer <YOUR_HYPERMODE_TOKEN>" \
     --header "Content-Type: application/rdf" \
-    --data @data/articles/nyt_example_article.rdf
+    --data-binary "@data/articles/nyt_articles_versions.rdf"
 ```
 
 
