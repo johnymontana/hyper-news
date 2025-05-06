@@ -25,17 +25,17 @@ upload-data:
 	TOKEN=$$(echo "$$DGRAPH_CONNECTION_STRING" | grep -o 'bearertoken=[^&]*' | sed 's/bearertoken=//'); \
 	echo "Using host: $$HOST"; \
 	echo "Using token: $$TOKEN"; \
-	echo "\n\n1. Uploading RDF data to Dgraph..."; \
+	echo "\n1. Updating schema..."; \
+	curl -X POST "https://$$HOST/dgraph/alter" \
+		--header "Authorization: Bearer $$TOKEN" \
+		--header "Content-Type: application/dql" \
+		--data-binary "@dgraph/schema.dql"; \
+	echo "\n\n2. Uploading RDF data to Dgraph..."; \
 	(echo '{ set {'; cat data/articles/nyt_articles_versions.rdf; echo '}}') > /tmp/wrapped_data.rdf; \
 	curl -v -X POST "https://$$HOST/dgraph/mutate?commitNow=true&timeout=90s" \
 		--header "Authorization: Bearer $$TOKEN" \
 		--header "Content-Type: application/rdf" \
-		--data-binary "@/tmp/wrapped_data.rdf"; \
-	echo "\n2. Updating schema..."; \
-	curl -X POST "https://$$HOST/dgraph/alter" \
-		--header "Authorization: Bearer $$TOKEN" \
-		--header "Content-Type: application/dql" \
-		--data-binary "@dgraph/schema.dql";
+		--data-binary "@/tmp/wrapped_data.rdf";
 	@echo "\n\nAll operations complete!"
 	@rm /tmp/wrapped_data.rdf
 
