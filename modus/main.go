@@ -84,6 +84,11 @@ type PeopleData struct {
 	People []*Person `json:"people"`
 }
 
+type ResponseWithLogs struct {
+	Response string   `json:"response"`
+	Logs     []string `json:"logs"`
+}
+
 func GetEmbeddingsForText(texts ...string) ([][]float32, error) {
 	model, err := models.GetModel[openai.EmbeddingsModel]("nomic-embed")
 
@@ -108,11 +113,6 @@ func GetEmbeddingsForText(texts ...string) ([][]float32, error) {
 
 	return results, nil
 }
-
-// TODO: add property with minilm embedding value in rdf
-// TODO: add modus function to embed with minilm
-// TODO: add modus function to implement vector search using minilm embedding value - does it work?
-// TODO: if not then push to github and write it up
 
 func QuerySimilar(userQuery *string) ([]*Article, error) {
 	// TODO: embed query and search
@@ -182,7 +182,7 @@ func QuerySimilar(userQuery *string) ([]*Article, error) {
 	return articleData.Articles, nil
 }
 
-func QueryLocations(lon float64, lat float64, distance int) ([]*GeoData, error) {
+func QueryLocations(lon float64, lat float64, distance int64) ([]*GeoData, error) {
 
 	// locationCoordinate, err := GeocodeLocation(location)
 	// if err != nil {
@@ -362,23 +362,6 @@ var sampleCoordianteJson string = func() string {
 	return string(bytes)
 }()
 
-type Product struct {
-	Id          string  `json:"id,omitempty"`
-	Name        string  `json:"name"`
-	Price       float64 `json:"price"`
-	Description string  `json:"description"`
-}
-
-var sampleProductJson string = func() string {
-	bytes, _ := utils.JsonSerialize(Product{
-		Id:          "123",
-		Name:        "Shoes",
-		Price:       50.0,
-		Description: "Great shoes for walking.",
-	})
-	return string(bytes)
-}()
-
 func GeocodeLocation(location string) (*Coordinate, error) {
 	instruction := "I need the location for a given location. Only respond with valid JSON object in this format:\n" + sampleCoordianteJson
 	prompt := fmt.Sprintf(`The location is "%s".`, location)
@@ -412,117 +395,18 @@ func GeocodeLocation(location string) (*Coordinate, error) {
 	return &coordinate, nil
 }
 
-// This function generates a single product.
-func GenerateProduct(category string) (*Product, error) {
+func ExploreNewsWithTools(prompt string) (ResponseWithLogs, error) {
+	var logs []string
 
-	// We can get creative with the instruction and prompt to guide the model
-	// in generating the desired output.  Here we provide a sample JSON of the
-	// object we want the model to generate.
-	instruction := "Generate a product for the category provided.\n" +
-		"Only respond with valid JSON object in this format:\n" + sampleProductJson
-	prompt := fmt.Sprintf(`The category is "%s".`, category)
-
-	// Set up the input for the model, creating messages for the instruction and prompt.
 	model, err := models.GetModel[openai.ChatModel]("text-generator")
 	if err != nil {
-		return nil, err
-	}
-	input, err := model.CreateInput(
-		openai.NewSystemMessage(instruction),
-		openai.NewUserMessage(prompt),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	// Let's increase the temperature to get more creative responses.
-	// Be careful though, if the temperature is too high, the model may generate invalid JSON.
-	input.Temperature = 1.2
-
-	// This model also has a response format parameter that can be set to JSON,
-	// Which, along with the instruction, can help guide the model in generating valid JSON output.
-	input.ResponseFormat = openai.ResponseFormatJson
-
-	// Here we invoke the model with the input we created.
-	output, err := model.Invoke(input)
-	if err != nil {
-		return nil, err
-	}
-
-	// The output should contain the JSON string we asked for.
-	content := strings.TrimSpace(output.Choices[0].Message.Content)
-
-	// We can now parse the JSON string as a Product object.
-	var product Product
-	if err := json.Unmarshal([]byte(content), &product); err != nil {
-		return nil, fmt.Errorf("failed to parse JSON: %w", err)
-	}
-
-	return &product, nil
-}
-
-// This function generates multiple product.
-func GenerateProducts(category string, quantity int) ([]Product, error) {
-
-	// Similar to the generateText example, we can tailor the instruction and prompt
-	// to guide the model in generating the desired output.  Note that understanding the behavior
-	// of the model is important to get the desired results.  In this case, we need the model
-	// to return an _object_ containing an array, not an array of objects directly.
-	// That's because the model will not reliably generate an array of objects directly.
-	instruction := fmt.Sprintf("Generate %d products for the category provided.\n"+
-		"Only respond with a valid JSON object containing a valid JSON array named 'list', in this format:\n"+
-		`{"list":[%s]}`, quantity, sampleProductJson)
-	prompt := fmt.Sprintf(`The category is "%s".`, category)
-
-	// Set up the input for the model, creating messages for the instruction and prompt.
-	model, err := models.GetModel[openai.ChatModel]("text-generator")
-	if err != nil {
-		return nil, err
-	}
-	input, err := model.CreateInput(
-		openai.NewSystemMessage(instruction),
-		openai.NewUserMessage(prompt),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	// Adjust the model inputs, just like in the previous example.
-	// Be careful, if the temperature is too high, the model may generate invalid JSON.
-	input.Temperature = 1.2
-	input.ResponseFormat = openai.ResponseFormatJson
-
-	// Here we invoke the model with the input we created.
-	output, err := model.Invoke(input)
-	if err != nil {
-		return nil, err
-	}
-
-	// The output should contain the JSON string we asked for.
-	content := strings.TrimSpace(output.Choices[0].Message.Content)
-
-	// We can parse that JSON to a compatible object, to get the data we're looking for.
-	var data map[string][]Product
-	if err := json.Unmarshal([]byte(content), &data); err != nil {
-		return nil, fmt.Errorf("failed to parse JSON: %w", err)
-	}
-
-	// Now we can extract the list of products from the data.
-	products, found := data["list"]
-	if !found {
-		return nil, fmt.Errorf("expected 'list' key in JSON object")
-	}
-	return products, nil
-}
-
-func GenerateTextWithTools(prompt string) (string, error) {
-	model, err := models.GetModel[openai.ChatModel]("text-generator")
-	if err != nil {
-		return "", err
+		return ResponseWithLogs{}, err
 	}
 
 	instruction := `
 	You are a helpful assistant who is very knowledgeable about recent news. Use your tools to answer the user's question.
+
+	You may need to use multiple tools to resolve the users request, for example if they ask about news in a certain area you may need to first geocode the location and then query for news by location.
 	
 	`
 
@@ -531,7 +415,7 @@ func GenerateTextWithTools(prompt string) (string, error) {
 		openai.NewUserMessage(prompt),
 	)
 	if err != nil {
-		return "", err
+		return ResponseWithLogs{}, err
 	}
 
 	input.Temperature = 0.2
@@ -539,23 +423,29 @@ func GenerateTextWithTools(prompt string) (string, error) {
 	input.Tools = []openai.Tool{
 		openai.NewToolForFunction("QueryArticles", "Queries news articles from the database, sorted by publication date returning the newest first.").WithParameter("num", "integer", "Number of articles to return"),
 		openai.NewToolForFunction("QueryTopics", "Queries news topics from the database, sorted by publication date returning the newest first.").WithParameter("topic", "string", "Topic to search for"),
-		openai.NewToolForFunction("QueryLocations", "Find news articles based on location.").WithParameter("lon", "number", "Longitude of the location").WithParameter("lat", "number", "Latitude of the location").WithParameter("distance", "integer", "Distance in meters, recommend at least 50000"),
+		openai.NewToolForFunction("QueryLocations", "Find news articles based on latitude and longitude location coordinates.").WithParameter("lon", "number", "Longitude of the location").WithParameter("lat", "number", "Latitude of the location").WithParameter("distance", "integer", "Distance in meters, recommend at least 50000"),
 		openai.NewToolForFunction("GeocodeLocation", "Convert a location string to latitude and longitude coordinates.").WithParameter("location", "string", "Location string"),
 	}
 
 	for {
 		output, err := model.Invoke(input)
 		if err != nil {
-			return "", err
+			return ResponseWithLogs{}, err
 		}
 
 		msg := output.Choices[0].Message
 
 		if len(msg.ToolCalls) > 0 {
+
 			input.Messages = append(input.Messages, msg.ToAssistantMessage())
 
 			for _, tc := range msg.ToolCalls {
 				var toolMsg *openai.ToolMessage[string]
+
+				logs = append(logs, fmt.Sprintf("Calling function : %s with %s",
+					tc.Function.Name,
+					tc.Function.Arguments))
+
 				switch tc.Function.Name {
 				case "QueryArticles":
 					// Convert int64 to int and create a pointer to it
@@ -576,23 +466,25 @@ func GenerateTextWithTools(prompt string) (string, error) {
 					}
 
 				case "QueryLocations":
-					topic := gjson.Get(tc.Function.Arguments, "topic").String()
-					if result, err := QueryTopics(topic); err == nil {
+					lon := gjson.Get(tc.Function.Arguments, "lon").Float()
+					lat := gjson.Get(tc.Function.Arguments, "lat").Float()
+					distance := gjson.Get(tc.Function.Arguments, "distance").Int()
+					if result, err := QueryLocations(lon, lat, distance); err == nil {
 						toolMsg = openai.NewToolMessage(result, tc.Id)
 					} else {
 						toolMsg = openai.NewToolMessage(err, tc.Id)
 					}
 
 				case "GeocodeLocation":
-					topic := gjson.Get(tc.Function.Arguments, "topic").String()
-					if result, err := QueryTopics(topic); err == nil {
+					location := gjson.Get(tc.Function.Arguments, "location").String()
+					if result, err := GeocodeLocation(location); err == nil {
 						toolMsg = openai.NewToolMessage(result, tc.Id)
 					} else {
 						toolMsg = openai.NewToolMessage(err, tc.Id)
 					}
 
 				default:
-					return "", fmt.Errorf("unknown tool call: %s", tc.Function.Name)
+					return ResponseWithLogs{}, fmt.Errorf("unknown tool call: %s", tc.Function.Name)
 				}
 
 				input.Messages = append(input.Messages, toolMsg)
@@ -614,9 +506,12 @@ func GenerateTextWithTools(prompt string) (string, error) {
 				content = strings.TrimSpace(content)
 			}
 
-			return content, nil
+			return ResponseWithLogs{
+				Response: content,
+				Logs:     logs,
+			}, nil
 		} else {
-			return "", errors.New("invalid response from model")
+			return ResponseWithLogs{}, errors.New("invalid response from model")
 		}
 	}
 }

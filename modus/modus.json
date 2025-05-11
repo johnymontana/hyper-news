@@ -9,7 +9,7 @@
   },
   "models": {
     "text-generator": {
-      "sourceModel": "gpt-4o-mini",
+      "sourceModel": "gpt-4.1",
       "connection": "hypermode-router",
       "path": "v1/chat/completions"
     },
