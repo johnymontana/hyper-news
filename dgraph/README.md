@@ -163,12 +163,35 @@ This finds locations within 10km of New York City coordinates and their associat
 The schema includes `Article.embedding` with an HNSW vector index, allowing semantic searches:
 
 ```graphql
-{
-  similar_articles(func: vector_similarity(Article.embedding, [0.2, 0.1, ...], 5)) {
-    Article.title
-    Article.abstract
-    score: vector_similarity(Article.embedding, [0.2, 0.1, ...])
-  }
+query vector_search($embedding: string, $limit: int) {
+          articles(func: similar_to(Article.embedding, $limit, $embedding)) {
+            uid
+            Article.title
+            Article.abstract
+            score
+          }
+        }
+```
+
+This finds the 5 articles with embeddings most similar to the given vector.
+
+### Advanced Queries: Combining Multiple Filters
+
+Combine multiple filters for complex queries:
+
+```graphql
+query vector_search($embedding: string, $limit: int) {
+          articles(func: similar_to(Article.embedding, $limit, $embedding)) @filter(
+            anyoftext(Article.abstract, "technology AI") AND
+            ge(Article.published, "2025-01-01") AND
+            has(Article.geo)
+          ) {
+            uid
+            Article.title
+            Article.abstract
+            score
+          }
+        }
 }
 ```
 
