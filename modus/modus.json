@@ -9,8 +9,8 @@
   },
   "models": {
     "text-generator": {
-      "sourceModel": "gpt-4o-mini",
-      "connection": "openai",
+      "sourceModel": "gpt-4.1",
+      "connection": "hypermode-router",
       "path": "v1/chat/completions"
     },
     "nomic-embed": {

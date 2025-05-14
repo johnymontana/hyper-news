@@ -8,7 +8,7 @@
 	// 	// Path is relative to the devcontainer.json file.
 	// 	"dockerfile": "Dockerfile"
 	// },
-	"postCreateCommand": "wget https://github.com/tinygo-org/tinygo/releases/download/v0.37.0/tinygo_0.37.0_amd64.deb && sudo dpkg -i tinygo_0.37.0_amd64.deb && rm tinygo_0.37.0_amd64.deb && npm i -g @hypermode/hyp-cli && npm i -g @hypermode/modus-cli && modus sdk install go --force",
+	"postCreateCommand": "wget https://github.com/tinygo-org/tinygo/releases/download/v0.37.0/tinygo_0.37.0_amd64.deb && sudo dpkg -i tinygo_0.37.0_amd64.deb && rm tinygo_0.37.0_amd64.deb && npm i -g @hypermode/hyp-cli && npm i -g @hypermode/modus-cli && modus sdk install go v0.17.3 --force",
 	// "features": {
 	// 	"ghcr.io/devcontainers/features/node:1": {},
 	// 	"ghcr.io/devcontainers-community/features/tinygo:1": {}

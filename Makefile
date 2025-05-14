@@ -1,5 +1,9 @@
 .PHONY: help upload-data parse-env start-mcp start-modus clean
 
+DGRAPH_CONNECTION_STRING:=$(shell grep DGRAPH_CONNECTION_STRING .env | cut -d '=' -f2- | tr -d '"' | tr -d "'")
+MODEL_ROUTER_TOKEN:=$(shell grep HYPERMODE_MODEL_ROUTER_TOKEN .env | cut -d '=' -f2- | tr -d '"' | tr -d "'")
+
+
 # Default target
 help:
 	@echo "Available targets:"
@@ -17,13 +21,8 @@ upload-data:
 		echo "Error: .env file not found"; \
 		exit 1; \
 	fi
-	@DGRAPH_CONNECTION_STRING=$$(grep DGRAPH_CONNECTION_STRING .env | cut -d '=' -f2- | tr -d '"' | tr -d "'"); \
-	if [ -z "$$DGRAPH_CONNECTION_STRING" ]; then \
-		echo "Error: DGRAPH_CONNECTION_STRING not found in .env file"; \
-		exit 1; \
-	fi; \
-	HOST=$$(echo "$$DGRAPH_CONNECTION_STRING" | sed 's|^dgraph://||' | cut -d':' -f1); \
-	TOKEN=$$(echo "$$DGRAPH_CONNECTION_STRING" | grep -o 'bearertoken=[^&]*' | sed 's/bearertoken=//'); \
+	@HOST=$$(echo "$(DGRAPH_CONNECTION_STRING)" | sed 's|^dgraph://||' | cut -d':' -f1); \
+	TOKEN=$$(echo "$(DGRAPH_CONNECTION_STRING)" | grep -o 'bearertoken=[^&]*' | sed 's/bearertoken=//'); \
 	echo "Using host: $$HOST"; \
 	echo "Using token: $$TOKEN"; \
 	echo "\n1. Updating schema..."; \
@@ -39,6 +38,18 @@ upload-data:
 		--data-binary "@/tmp/wrapped_data.rdf";
 	@echo "\n\nAll operations complete!"
 	@rm /tmp/wrapped_data.rdf
+
+start-modus:
+	@echo "Parsing connection string from .env file..."
+	@if [ ! -f .env ]; then \
+		echo "Error: .env file not found"; \
+		exit 1; \
+	fi
+	export ESCAPED_CONNECTION_STRING="$(DGRAPH_CONNECTION_STRING)" && \
+	ESCAPED_CONNECTION_STRING=$$(echo "$$ESCAPED_CONNECTION_STRING" | sed 's/&/\\&/g') && \
+	sed -i "s|{{CONNECTION_STRING}}|$$ESCAPED_CONNECTION_STRING|g" modus/modus.json
+	sed -i 's|<YOUR_HYPERMODE_ROUTER_TOKEN>|$(MODEL_ROUTER_TOKEN)|g' modus/.env 
+	cd modus && modus dev
 
 
 # Parse environment variables from .env file
@@ -68,12 +79,6 @@ parse-env:
 start-mcp:
 	@echo "Starting Dgraph MCP server..."
 	cd mcp-server && modus dev
-
-# Start the Modus server
-start-modus:
-	@echo "Starting Modus server..."
-	cd modus && modus dev
-
 
 # export environment variables from .env file
 export-env:
