@@ -115,7 +115,6 @@ func GetEmbeddingsForText(texts ...string) ([][]float32, error) {
 }
 
 func QuerySimilar(userQuery *string) ([]*Article, error) {
-	// TODO: embed query and search
 
 	embedding, err := GetEmbeddingsForText(*userQuery)
 	if err != nil {
@@ -129,10 +128,9 @@ func QuerySimilar(userQuery *string) ([]*Article, error) {
 		console.Log(string(embeddingJson))
 	}
 
-	//
 	query := dgraph.NewQuery(`
 	query vector_search($embedding: float32vector) {
-		articles(func: type(Article), orderdesc:Article.published,first:100) {
+		articles(func: similar_to(Article.embedding, 5, $embedding), orderdesc:Article.published,first:100) {
 		  uid
 			Article.title
 			Article.abstract
@@ -142,17 +140,15 @@ func QuerySimilar(userQuery *string) ([]*Article, error) {
 			}
 
 			Article.org {
-			Organization.name
+				Organization.name
 			}
 
 			Article.topic {
-			Topic.name
+				Topic.name
 			}
-
-
 			dgraph.type
-		}
 	  }
+}
 	`).WithVariable("$embedding", embedding[0])
 
 	response, err := dgraph.ExecuteQuery(connection, query)
