@@ -31,6 +31,8 @@ The HyperNews frontend provides two main interfaces for exploring and analyzing 
 
 ### Home Page (Article List)
 
+- [Home Page](https://hyper-news-git-main-hypermode.vercel.app/)
+
 The main interface displays a curated list of the latest articles from your knowledge graph. Each article card shows:
 
 - Article title and abstract
@@ -39,6 +41,8 @@ The main interface displays a curated list of the latest articles from your know
 - Metadata including article ID for reference
 
 ### Chat Interface (/chat)
+
+- [Chat Interface](https://hyper-news-git-main-hypermode.vercel.app/chat)
 
 An interactive AI-powered chat interface powered by a [Modus Agent](https://docs.hypermode.com/modus/agents) that allows you to:
 
