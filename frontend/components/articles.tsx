@@ -3,7 +3,6 @@
 import { GET_ARTICLES } from '@/app/queries';
 import { useQuery } from '@apollo/client';
 import React, { useState, useRef } from 'react';
-import ChatBox from './chat-box';
 
 interface ArticleData {
   uid: string;
@@ -18,30 +17,6 @@ export default function Articles() {
   const [, setSearchResults] = useState<string | null>(null);
   const [searchedArticles, setSearchedArticles] = useState<ArticleData[] | null>(null);
   const articlesRef = useRef<HTMLDivElement>(null);
-
-  const handleSearchResults = (results: string) => {
-    setSearchResults(results);
-
-    try {
-      const parsedResults = JSON.parse(results);
-
-      if (Array.isArray(parsedResults)) {
-        setSearchedArticles(parsedResults);
-      } else {
-        console.log('Received non-array result:', parsedResults);
-        setSearchedArticles(null);
-      }
-    } catch (error) {
-      console.error('Error parsing search results:', error);
-      setSearchedArticles(null);
-    }
-
-    setTimeout(() => {
-      if (articlesRef.current) {
-        articlesRef.current.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
-  };
 
   const resetSearch = () => {
     setSearchResults(null);
@@ -91,11 +66,6 @@ export default function Articles() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-12 max-w-3xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Ask About News</h2>
-        <ChatBox onResultsReceived={handleSearchResults} />
-      </div>
-
       <div ref={articlesRef}>
         {searchedArticles ? (
           <div className="max-w-5xl mx-auto">
