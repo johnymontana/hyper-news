@@ -1,7 +1,12 @@
 import type { Config } from 'tailwindcss';
 
 export default {
-  content: ['./src/app/**/*.{js,ts,jsx,tsx,mdx}', 'node_modules/@aichatkit/ui/dist/**/*.{js,ts,jsx,tsx,css}'],
+  content: [
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    'node_modules/@aichatkit/ui/dist/**/*.{js,ts,jsx,tsx,css}',
+  ],
   theme: {
     extend: {
       colors: {
@@ -99,10 +104,19 @@ export default {
           '0%, 80%, 100%': { transform: 'translateY(0)' },
           '40%': { transform: 'translateY(-6px)' },
         },
+        shimmer: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-out forwards',
         'loading-bounce': 'loadingDotBounce 0.6s infinite ease-in-out',
+        shimmer: 'shimmer 2s infinite',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
   },
