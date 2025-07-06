@@ -4,10 +4,24 @@ Knowledge graph + AI Agent analysis of news using multi modal GraphRAG approach 
 
 ![hyper-news graph data model](img/graph-model.png)
 
-* Multi-modal GraphRAG approach
-* Dgraph knowledge graph
-* Modus for embeddings and vector similarity search
-* Frontend using Next.js for chat interface and graph / map visualization
+<!-- trunk-ignore(markdownlint/MD033) -->
+<div style="display: flex; gap: 20px; margin: 20px 0;">
+  <!-- trunk-ignore(markdownlint/MD033) -->
+  <div style="flex: 1;">
+    <!-- trunk-ignore(markdownlint/MD033) -->
+    <img src="img/hypernews-home.png" alt="HyperNews Home Interface" style="width: 100%; height: auto;">
+  </div>
+  <!-- trunk-ignore(markdownlint/MD033) -->
+  <div style="flex: 1;">
+    <!-- trunk-ignore(markdownlint/MD033) -->
+    <img src="img/hypernews-chat-1.png" alt="HyperNews Chat Interface" style="width: 100%; height: auto;">
+  </div>
+</div>
+
+- Multi-modal GraphRAG approach
+- Dgraph knowledge graph
+- Modus for embeddings and vector similarity search
+- Frontend using Next.js for chat interface and graph / map visualization
 
 ## Create Your Hypermode Graph
 
@@ -102,8 +116,8 @@ _:2ec51336-568e-4c86-8d77-1592afa83611 <Image.article> _:89285c4b-ab8b-424c-9563
   }
 }
 ```
-</details>
 
+</details>
 
 ![import sample data](img/hypermode-4.png)
 
@@ -115,7 +129,6 @@ curl -v -X POST https://<YOUR_HYPERMODE_GRAPH>.hypermode.host/dgraph/mutate \
     --header "Content-Type: application/rdf" \
     --data-binary "@data/articles/nyt_articles_versions.rdf"
 ```
-
 
 ## Data
 
