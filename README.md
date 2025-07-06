@@ -423,3 +423,17 @@ modus dev
           }
         }
 ```
+
+---
+
+<!-- trunk-ignore(markdownlint/MD033) -->
+<p align="center" style="margin-top: 4em; margin-bottom: 4em;">
+  <!-- trunk-ignore(markdownlint/MD033) -->
+  <strong>Built with <a href="https://hypermode.com">Hypermode</a></strong>
+</p>
+
+<!-- trunk-ignore(markdownlint/MD033) -->
+<p align="center">
+  <!-- trunk-ignore(markdownlint/MD033) -->
+  <img src="img/banner.png" alt="Hypermode - The AI Development Platform" width="100%">
+</p>
