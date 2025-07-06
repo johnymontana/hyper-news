@@ -9,22 +9,25 @@ Knowledge graph + AI Agent analysis of news using multi modal GraphRAG approach 
 The HyperNews frontend provides two main interfaces for exploring and analyzing news content:
 
 <!-- trunk-ignore(markdownlint/MD033) -->
-<div style="display: flex; gap: 20px; margin: 20px 0;">
+<table>
   <!-- trunk-ignore(markdownlint/MD033) -->
-  <div style="flex: 1;">
+  <tr>
     <!-- trunk-ignore(markdownlint/MD033) -->
-    <img src="img/hypernews-home.png" alt="HyperNews Home Interface" style="width: 100%; height: auto;">
+    <td width="50%">
+      <!-- trunk-ignore(markdownlint/MD033) -->
+      <img src="img/hypernews-home.png" alt="HyperNews Home Interface" width="100%">
+      <!-- trunk-ignore(markdownlint/MD033) -->
+      <p align="center"><em>Article browsing interface with latest news</em></p>
+    </td>
     <!-- trunk-ignore(markdownlint/MD033) -->
-    <p style="text-align: center; margin-top: 10px; font-style: italic;">Article browsing interface with latest news</p>
-  </div>
-  <!-- trunk-ignore(markdownlint/MD033) -->
-  <div style="flex: 1;">
-    <!-- trunk-ignore(markdownlint/MD033) -->
-    <img src="img/hypernews-chat-1.png" alt="HyperNews Chat Interface" style="width: 100%; height: auto;">
-    <!-- trunk-ignore(markdownlint/MD033) -->
-    <p style="text-align: center; margin-top: 10px; font-style: italic;">AI chat interface for interactive news analysis</p>
-  </div>
-</div>
+    <td width="50%">
+      <!-- trunk-ignore(markdownlint/MD033) -->
+      <img src="img/hypernews-chat-1.png" alt="HyperNews Chat Interface" width="100%">
+      <!-- trunk-ignore(markdownlint/MD033) -->
+      <p align="center"><em>AI chat interface for interactive news analysis</em></p>
+    </td>
+  </tr>
+</table>
 
 ### Home Page (Article List)
 
