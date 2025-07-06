@@ -29,7 +29,7 @@ export default function Articles() {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">
         <div className="flex flex-col items-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-400"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-400"></div>
           <div className="text-xl font-medium text-gray-300">Loading articles...</div>
         </div>
       </div>
@@ -54,12 +54,12 @@ export default function Articles() {
       {articleList.map((article) => (
         <div
           key={article.uid}
-          className="bg-hypermode-card border border-hypermode-border rounded-lg p-6 hover:bg-hypermode-hover transition-all duration-200 group"
+          className="bg-hypermode-card border border-hypermode-border rounded-lg p-6 hover:bg-hypermode-hover transition-all duration-200 group article-card"
         >
           <div className="flex flex-col h-full">
             {/* Article Header */}
             <div className="flex-1">
-              <h2 className="text-xl font-semibold mb-3 text-white group-hover:text-blue-300 transition-colors line-clamp-2">
+              <h2 className="text-xl font-semibold mb-3 text-white group-hover:text-pink-300 transition-colors line-clamp-2">
                 {article.title}
               </h2>
 
@@ -74,7 +74,7 @@ export default function Articles() {
 
               <div className="flex items-center space-x-2">
                 <Link href="/chat">
-                  <button className="flex items-center space-x-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium">
+                  <button className="flex items-center space-x-2 px-3 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg transition-colors text-sm font-medium">
                     <MessageCircle size={16} />
                     <span>Discuss</span>
                   </button>
@@ -160,7 +160,7 @@ export default function Articles() {
                 </div>
 
                 <Link href="/chat">
-                  <button className="flex items-center space-x-3 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium shadow-lg hover:shadow-xl">
+                  <button className="flex items-center space-x-3 px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white rounded-lg transition-colors font-medium shadow-lg hover:shadow-xl">
                     <MessageCircle size={20} />
                     <span>Start Chat</span>
                   </button>
