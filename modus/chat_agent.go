@@ -325,7 +325,9 @@ func (c *HyperNewsChatAgent) parseToolArguments(argsJSON string) map[string]inte
 
 func (c *HyperNewsChatAgent) executeNewsTool(toolCall openai.ToolCall) (interface{}, error) {
 	var args map[string]interface{}
-	json.Unmarshal([]byte(toolCall.Function.Arguments), &args)
+	if err := json.Unmarshal([]byte(toolCall.Function.Arguments), &args); err != nil {
+		return nil, fmt.Errorf("failed to parse tool arguments: %v", err)
+	}
 
 	switch toolCall.Function.Name {
 	case "search_articles":
@@ -349,10 +351,9 @@ func (c *HyperNewsChatAgent) searchArticles(args map[string]interface{}) (interf
 	query := c.getStringArg(args, "query", "")
 	limit := c.getIntArg(args, "limit", 5)
 
-	// Build vector similarity search query
-	dqlQuery := fmt.Sprintf(`
+	dqlQuery := `
 	query search_articles($query: string, $limit: int) {
-		articles(func: anyoftext(Article.title Article.abstract, $query), first: $limit) {
+		articles(func: type(Article), first: $limit) @filter(anyofterms(Article.abstract, $query)) {
 			uid
 			Article.title
 			Article.abstract
@@ -368,7 +369,7 @@ func (c *HyperNewsChatAgent) searchArticles(args map[string]interface{}) (interf
 				Geo.name
 			}
 		}
-	}`)
+	}`
 
 	dgraphQuery := dgraph.NewQuery(dqlQuery).
 		WithVariable("$query", query).
