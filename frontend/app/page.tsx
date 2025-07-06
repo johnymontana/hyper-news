@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Articles from '../components/articles';
-import { MessageCircle, Zap } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 
 export default function Page() {
   return (

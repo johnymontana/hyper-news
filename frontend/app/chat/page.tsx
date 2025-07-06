@@ -56,7 +56,7 @@ export default function ChatPage() {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-hypermode-bg">
         <div className="flex flex-col items-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-400"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-400"></div>
           <div className="text-lg text-white">Loading HyperNews Chat...</div>
         </div>
       </div>
@@ -77,7 +77,7 @@ export default function ChatPage() {
         deleteConversationIcon={<XIcon size={16} />}
         userAvatar={<Avatar initial="U" role="user" hypermodeStyle={true} />}
         assistantAvatar={
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center">
             <Zap size={16} className="text-white" />
           </div>
         }
@@ -87,20 +87,20 @@ export default function ChatPage() {
             <div className="flex items-center gap-3">
               <Link
                 href="/"
-                className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors group"
+                className="flex items-center gap-2 text-pink-400 hover:text-pink-300 transition-colors group"
               >
                 <ArrowLeftIcon size={20} className="group-hover:-translate-x-1 transition-transform" />
                 <span>Back to News</span>
               </Link>
               <div className="h-6 w-px bg-hypermode-border" />
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center">
                   <Zap size={16} className="text-white" />
                 </div>
                 <div>
                   <span className="font-semibold text-white">HyperNews Assistant</span>
                   <div className="flex items-center space-x-2 text-xs text-gray-400">
-                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                    <div className="w-1.5 h-1.5 bg-pink-400 rounded-full animate-pulse"></div>
                     <span>AI Ready</span>
                   </div>
                 </div>
@@ -111,10 +111,10 @@ export default function ChatPage() {
         sidebarHeaderContent={
           <div className="flex items-center justify-center border-hypermode-border border-b bg-hypermode-card p-4">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center">
                 <Zap size={16} className="text-white" />
               </div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-pink-400 to-pink-300 bg-clip-text text-transparent">
                 HyperNews
               </h1>
             </div>
