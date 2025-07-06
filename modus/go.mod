@@ -3,7 +3,7 @@ module modus
 go 1.23.1
 
 require (
-	github.com/hypermodeinc/modus/sdk/go v0.17.3
+	github.com/hypermodeinc/modus/sdk/go v0.18.0
 	github.com/tidwall/gjson v1.18.0
 )
 
