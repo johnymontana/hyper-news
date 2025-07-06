@@ -323,13 +323,12 @@ func QueryArticles(num int) ([]*Article, error) {
 func QueryPeople() ([]*Person, error) {
 	query := dgraph.NewQuery(`
 	{
-		people(func: has(dgraph.type, "Person")) {
+		people(func: type(Person)) {
 			uid
-			firstName
-			lastName
+			Person.name
 			dgraph.type
 		}
-		}
+	}
 	`)
 
 	response, err := dgraph.ExecuteQuery(connection, query)
