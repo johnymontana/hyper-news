@@ -36,7 +36,8 @@
     },
     "dgraph": {
       "type": "dgraph",
-      "connString": "{{CONNECTION_STRING}}"
+      "grpcTarget": "hypernews-hypermode.hypermode.host:443",
+      "key": "{{API_KEY}}"
     },
     "dgraph-http": {
       "type": "http",

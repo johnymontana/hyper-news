@@ -13,8 +13,13 @@
   "dependencies": {
     "@apollo/client": "latest",
     "@apollo/experimental-nextjs-app-support": "latest",
+    "@aichatkit/ui": "^0.0.0-alpha.6",
+    "@aichatkit/apollo-adapter": "^0.0.0-alpha.6",
+    "@aichatkit/localstorage-adapter": "^0.0.0-alpha.6",
+    "@aichatkit/types": "^0.0.0-alpha.6",
     "autoprefixer": "^10.4.20",
     "graphql": "^16.10.0",
+    "lucide-react": "^0.488.0",
     "next": "^15.2.3",
     "react": "^19",
     "react-dom": "^19",
