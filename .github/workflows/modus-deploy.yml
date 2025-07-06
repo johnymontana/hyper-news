@@ -8,7 +8,7 @@ on:
       - main
 
 env:
-  MODUS_DIR: ""
+  MODUS_DIR: modus/
 
 permissions:
   contents: read
