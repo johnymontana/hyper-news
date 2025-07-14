@@ -51,6 +51,11 @@ start-modus:
 	sed -i 's|<YOUR_HYPERMODE_ROUTER_TOKEN>|$(MODEL_ROUTER_TOKEN)|g' modus/.env 
 	cd modus && modus dev
 
+start-frontend:
+	@echo "Starting frontend..."
+	pnpm install
+	pnpm run dev
+
 
 # Parse environment variables from .env file
 parse-env:
