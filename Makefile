@@ -1,4 +1,4 @@
-.PHONY: help upload-data parse-env start-mcp start-modus clean
+.PHONY: help upload-data parse-env start-mcp start-modus clean setup
 
 DGRAPH_CONNECTION_STRING:=$(shell grep DGRAPH_CONNECTION_STRING .env | cut -d '=' -f2- | tr -d '"' | tr -d "'")
 MODEL_ROUTER_TOKEN:=$(shell grep HYPERMODE_MODEL_ROUTER_TOKEN .env | cut -d '=' -f2- | tr -d '"' | tr -d "'")
@@ -95,3 +95,11 @@ clean:
 	rm -f .env.parsed
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
+
+# Set up development dependencies if devcontainer postCreate command fails
+setup:
+	@echo "Setting up development environment..."
+	rm tinygo_0.37.0_amd64.deb
+	wget https://github.com/tinygo-org/tinygo/releases/download/v0.37.0/tinygo_0.37.0_amd64.deb
+	sudo dpkg -i tinygo_0.37.0_amd64.deb && rm tinygo_0.37.0_amd64.deb
+	npm i -g @hypermode/modus-cli
